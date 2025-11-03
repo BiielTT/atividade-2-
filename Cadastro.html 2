@@ -1,1 +1,356 @@
+DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Usuário – ONG GF LTDA</title>
+
+<style>
+/* =====================================================
+   🎨 SISTEMA DE DESIGN GLOBAL
+   ===================================================== */
+:root {
+  --cor-primaria: #007bff;
+  --cor-primaria-hover: #0056b3;
+  --cor-sucesso: #28a745;
+  --cor-alerta: #ffc107;
+  --cor-erro: #dc3545;
+  --cor-branco: #ffffff;
+  --cor-fundo: #f4f7f6;
+  --cor-texto: #333;
+  --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================================================
+   🧱 BASE
+   ===================================================== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* =====================================================
+   💠 SISTEMA DE CARTÕES RESPONSIVOS
+   ===================================================== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background-color: var(--cor-branco);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--sombra-suave);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 15px 20px;
+}
+
+.card-content h3 {
+  margin: 0;
+  color: var(--cor-primaria);
+}
+
+.card-content p {
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+/* =====================================================
+   🏷️ SISTEMA DE EMBLEMAS E TAGS
+   ===================================================== */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  color: var(--cor-branco);
+  margin-right: 5px;
+}
+.badge.saude { background-color: var(--cor-sucesso); }
+.badge.social { background-color: var(--cor-alerta); }
+.badge.educacao { background-color: var(--cor-primaria-hover); }
+
+/* =====================================================
+   🔘 BOTÕES COM ESTADOS
+   ===================================================== */
+button {
+  background-color: var(--cor-primaria);
+  color: var(--cor-branco);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--cor-primaria-hover);
+}
+button:focus {
+  outline: 3px solid rgba(0,123,255,0.4);
+}
+button:active {
+  background-color: var(--cor-sucesso);
+}
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   📋 FORMULÁRIO ESTILIZADO + VALIDAÇÃO VISUAL
+   ===================================================== */
+form {
+  background-color: var(--cor-branco);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: var(--sombra-suave);
+  width: 100%;
+  max-width: 500px;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+legend {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--cor-texto);
+}
+
+form div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+input:invalid {
+  border-color: var(--cor-erro);
+}
+
+/* =====================================================
+   ⚡ COMPONENTES DE FEEDBACK (Alertas / Modais / Toasts)
+   ===================================================== */
+.alert {
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  color: var(--cor-branco);
+  font-weight: bold;
+  display: none;
+}
+
+.alert.sucesso { background-color: var(--cor-sucesso); }
+.alert.erro { background-color: var(--cor-erro); }
+.alert.aviso { background-color: var(--cor-alerta); color: #333; }
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-conteudo {
+  background: var(--cor-branco);
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: var(--sombra-suave);
+}
+
+/* Toast (Brinde) */
+.toast {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: var(--cor-primaria);
+  color: var(--cor-branco);
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: none;
+}
+
+/* =====================================================
+   📱 RESPONSIVIDADE
+   ===================================================== */
+@media (max-width: 600px) {
+  .card img { height: 120px; }
+  form { padding: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Configurações e Projetos – ONG GF LTDA</h1>
+
+<!-- 💠 SISTEMA DE CARTÕES -->
+<div class="cards">
+  <div class="card">
+    <img src="https://portalimbiara.com.br/dados/noticia/341/imagem/thumbnails/WhatsApp%20Image%202019-01-22%20at%2011.25.42_1000x667.jpeg" alt="Projeto Saúde">
+    <div class="card-content">
+      <h3>Saúde Ativa</h3>
+      <span class="badge saude">Saúde</span>
+      <span class="badge social">Social</span>
+      <p>Promove campanhas de vacinação e apoio nutricional em comunidades carentes.</p>
+      <button onclick="abrirModal()">Saiba mais</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://gmconline.com.br/wp-content/uploads/2023/02/fcc91bc368b5ec7fa0c59658338c9c42.jpg" alt="Projeto Educação">
+    <div class="card-content">
+      <h3>Educar para Transformar</h3>
+      <span class="badge educacao">Educação</span>
+      <p>Oferece aulas praticas e cursos de capacitação para modalidades coletivas para jovens e adultos.</p>
+      <button disabled>Em breve</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📋 FORMULÁRIO DE CONFIGURAÇÕES -->
+<form onsubmit="mostrarFeedback(event)">
+  <fieldset>
+    <legend>Configurações de Perfil</legend>
+    <li><a href="pagina.html">Home</a></li>
+
+    <div>
+      <label for="nomeCompleto">Nome Completo:</label>
+      <input type="text" id="nomeCompleto" name="nomeCompleto" required placeholder="Seu nome completo">
+    </div>
+
+    <div>
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required placeholder="seu.email@exemplo.com">
+    </div>
+
+    <div>
+      <label for="cpf">CPF:</label>
+      <input type="text" id="cpf" name="cpf" required pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Formato: 000.000.000-00" placeholder="000.000.000-00">
+    </div>
+
+    <div>
+      <label for="telefone">Telefone:</label>
+      <input type="tel" id="telefone" name="telefone" required placeholder="(XX) XXXXX-XXXX">
+    </div>
+
+    <div>
+      <label for="dataNascimento">Data de Nascimento:</label>
+      <input type="date" id="dataNascimento" name="dataNascimento" required>
+    </div>
+
+    <div>
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" name="endereco" required placeholder="Rua Exemplo, 123">
+    </div>
+
+    <div>
+      <label for="cidade">Cidade:</label>
+      <input type="text" id="cidade" name="cidade" required>
+    </div>
+
+    <div>
+      <label for="estado">Estado:</label>
+      <select id="estado" name="estado" required>
+        <option value="">Selecione</option>
+        <option value="DF">Distrito Federal</option>
+        <option value="SP">São Paulo</option>
+        <option value="RJ">Rio de Janeiro</option>
+      </select>
+    </div>
+
+    <button type="submit">Salvar Configurações</button>
+  </fieldset>
+</form>
+
+<!-- ⚡ FEEDBACK -->
+<div class="alert sucesso" id="alertSucesso">✔ Dados salvos com sucesso!</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-conteudo">
+    <h3>Mais sobre o Projeto</h3>
+    <p>O projeto "Saúde Ativa" realiza mutirões de saúde e educação alimentar em comunidades.</p>
+    <button onclick="fecharModal()">Fechar</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Configurações atualizadas!</div>
+
+<script>
+/* Modal */
+function abrirModal() {
+  document.getElementById('modal').style.display = 'flex';
+}
+function fecharModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+/* Toast e Alerta */
+function mostrarFeedback(event) {
+  event.preventDefault();
+  const alert = document.getElementById('alertSucesso');
+  const toast = document.getElementById('toast');
+  alert.style.display = 'block';
+  toast.style.display = 'block';
+  setTimeout(() => { alert.style.display = 'none'; toast.style.display = 'none'; }, 3000);
+}
+</script>
+
+</body>
+</html>
 
